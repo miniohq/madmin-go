@@ -1,3 +1,8 @@
+##
+## MinIO Inc [madmin-go]
+## Copyright (c) 2014-2024 MinIO.
+## All rights reserved. No warranty, explicit or implicit, provided.
+##
 name: VulnCheck
 on:
   pull_request:

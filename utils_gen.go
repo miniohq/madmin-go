@@ -48,10 +48,11 @@ func (z *NodeCommon) DecodeMsg(dc *msgp.Reader) (err error) {
 		}
 	}
 	// Clear omitted fields.
-	if (zb0001Mask & 0x1) == 0 {
-		z.Error = ""
+	if zb0001Mask != 0x1 {
+		if (zb0001Mask & 0x1) == 0 {
+			z.Error = ""
+		}
 	}
-
 	return
 }
 
@@ -70,30 +71,29 @@ func (z NodeCommon) EncodeMsg(en *msgp.Writer) (err error) {
 	if err != nil {
 		return
 	}
-
-	// skip if no fields are to be emitted
-	if zb0001Len != 0 {
-		// write "addr"
-		err = en.Append(0xa4, 0x61, 0x64, 0x64, 0x72)
+	if zb0001Len == 0 {
+		return
+	}
+	// write "addr"
+	err = en.Append(0xa4, 0x61, 0x64, 0x64, 0x72)
+	if err != nil {
+		return
+	}
+	err = en.WriteString(z.Addr)
+	if err != nil {
+		err = msgp.WrapError(err, "Addr")
+		return
+	}
+	if (zb0001Mask & 0x2) == 0 { // if not omitted
+		// write "error"
+		err = en.Append(0xa5, 0x65, 0x72, 0x72, 0x6f, 0x72)
 		if err != nil {
 			return
 		}
-		err = en.WriteString(z.Addr)
+		err = en.WriteString(z.Error)
 		if err != nil {
-			err = msgp.WrapError(err, "Addr")
+			err = msgp.WrapError(err, "Error")
 			return
-		}
-		if (zb0001Mask & 0x2) == 0 { // if not omitted
-			// write "error"
-			err = en.Append(0xa5, 0x65, 0x72, 0x72, 0x6f, 0x72)
-			if err != nil {
-				return
-			}
-			err = en.WriteString(z.Error)
-			if err != nil {
-				err = msgp.WrapError(err, "Error")
-				return
-			}
 		}
 	}
 	return
@@ -112,17 +112,16 @@ func (z NodeCommon) MarshalMsg(b []byte) (o []byte, err error) {
 	}
 	// variable map header, size zb0001Len
 	o = append(o, 0x80|uint8(zb0001Len))
-
-	// skip if no fields are to be emitted
-	if zb0001Len != 0 {
-		// string "addr"
-		o = append(o, 0xa4, 0x61, 0x64, 0x64, 0x72)
-		o = msgp.AppendString(o, z.Addr)
-		if (zb0001Mask & 0x2) == 0 { // if not omitted
-			// string "error"
-			o = append(o, 0xa5, 0x65, 0x72, 0x72, 0x6f, 0x72)
-			o = msgp.AppendString(o, z.Error)
-		}
+	if zb0001Len == 0 {
+		return
+	}
+	// string "addr"
+	o = append(o, 0xa4, 0x61, 0x64, 0x64, 0x72)
+	o = msgp.AppendString(o, z.Addr)
+	if (zb0001Mask & 0x2) == 0 { // if not omitted
+		// string "error"
+		o = append(o, 0xa5, 0x65, 0x72, 0x72, 0x6f, 0x72)
+		o = msgp.AppendString(o, z.Error)
 	}
 	return
 }
@@ -169,10 +168,11 @@ func (z *NodeCommon) UnmarshalMsg(bts []byte) (o []byte, err error) {
 		}
 	}
 	// Clear omitted fields.
-	if (zb0001Mask & 0x1) == 0 {
-		z.Error = ""
+	if zb0001Mask != 0x1 {
+		if (zb0001Mask & 0x1) == 0 {
+			z.Error = ""
+		}
 	}
-
 	o = bts
 	return
 }
@@ -282,64 +282,63 @@ func (z *TimedAction) EncodeMsg(en *msgp.Writer) (err error) {
 	if err != nil {
 		return
 	}
-
-	// skip if no fields are to be emitted
-	if zb0001Len != 0 {
-		// write "count"
-		err = en.Append(0xa5, 0x63, 0x6f, 0x75, 0x6e, 0x74)
+	if zb0001Len == 0 {
+		return
+	}
+	// write "count"
+	err = en.Append(0xa5, 0x63, 0x6f, 0x75, 0x6e, 0x74)
+	if err != nil {
+		return
+	}
+	err = en.WriteUint64(z.Count)
+	if err != nil {
+		err = msgp.WrapError(err, "Count")
+		return
+	}
+	// write "acc_time_ns"
+	err = en.Append(0xab, 0x61, 0x63, 0x63, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x5f, 0x6e, 0x73)
+	if err != nil {
+		return
+	}
+	err = en.WriteUint64(z.AccTime)
+	if err != nil {
+		err = msgp.WrapError(err, "AccTime")
+		return
+	}
+	if (zb0001Mask & 0x4) == 0 { // if not omitted
+		// write "min_ns"
+		err = en.Append(0xa6, 0x6d, 0x69, 0x6e, 0x5f, 0x6e, 0x73)
 		if err != nil {
 			return
 		}
-		err = en.WriteUint64(z.Count)
+		err = en.WriteUint64(z.MinTime)
 		if err != nil {
-			err = msgp.WrapError(err, "Count")
+			err = msgp.WrapError(err, "MinTime")
 			return
 		}
-		// write "acc_time_ns"
-		err = en.Append(0xab, 0x61, 0x63, 0x63, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x5f, 0x6e, 0x73)
+	}
+	if (zb0001Mask & 0x8) == 0 { // if not omitted
+		// write "max_ns"
+		err = en.Append(0xa6, 0x6d, 0x61, 0x78, 0x5f, 0x6e, 0x73)
 		if err != nil {
 			return
 		}
-		err = en.WriteUint64(z.AccTime)
+		err = en.WriteUint64(z.MaxTime)
 		if err != nil {
-			err = msgp.WrapError(err, "AccTime")
+			err = msgp.WrapError(err, "MaxTime")
 			return
 		}
-		if (zb0001Mask & 0x4) == 0 { // if not omitted
-			// write "min_ns"
-			err = en.Append(0xa6, 0x6d, 0x69, 0x6e, 0x5f, 0x6e, 0x73)
-			if err != nil {
-				return
-			}
-			err = en.WriteUint64(z.MinTime)
-			if err != nil {
-				err = msgp.WrapError(err, "MinTime")
-				return
-			}
+	}
+	if (zb0001Mask & 0x10) == 0 { // if not omitted
+		// write "bytes"
+		err = en.Append(0xa5, 0x62, 0x79, 0x74, 0x65, 0x73)
+		if err != nil {
+			return
 		}
-		if (zb0001Mask & 0x8) == 0 { // if not omitted
-			// write "max_ns"
-			err = en.Append(0xa6, 0x6d, 0x61, 0x78, 0x5f, 0x6e, 0x73)
-			if err != nil {
-				return
-			}
-			err = en.WriteUint64(z.MaxTime)
-			if err != nil {
-				err = msgp.WrapError(err, "MaxTime")
-				return
-			}
-		}
-		if (zb0001Mask & 0x10) == 0 { // if not omitted
-			// write "bytes"
-			err = en.Append(0xa5, 0x62, 0x79, 0x74, 0x65, 0x73)
-			if err != nil {
-				return
-			}
-			err = en.WriteUint64(z.Bytes)
-			if err != nil {
-				err = msgp.WrapError(err, "Bytes")
-				return
-			}
+		err = en.WriteUint64(z.Bytes)
+		if err != nil {
+			err = msgp.WrapError(err, "Bytes")
+			return
 		}
 	}
 	return
@@ -366,30 +365,29 @@ func (z *TimedAction) MarshalMsg(b []byte) (o []byte, err error) {
 	}
 	// variable map header, size zb0001Len
 	o = append(o, 0x80|uint8(zb0001Len))
-
-	// skip if no fields are to be emitted
-	if zb0001Len != 0 {
-		// string "count"
-		o = append(o, 0xa5, 0x63, 0x6f, 0x75, 0x6e, 0x74)
-		o = msgp.AppendUint64(o, z.Count)
-		// string "acc_time_ns"
-		o = append(o, 0xab, 0x61, 0x63, 0x63, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x5f, 0x6e, 0x73)
-		o = msgp.AppendUint64(o, z.AccTime)
-		if (zb0001Mask & 0x4) == 0 { // if not omitted
-			// string "min_ns"
-			o = append(o, 0xa6, 0x6d, 0x69, 0x6e, 0x5f, 0x6e, 0x73)
-			o = msgp.AppendUint64(o, z.MinTime)
-		}
-		if (zb0001Mask & 0x8) == 0 { // if not omitted
-			// string "max_ns"
-			o = append(o, 0xa6, 0x6d, 0x61, 0x78, 0x5f, 0x6e, 0x73)
-			o = msgp.AppendUint64(o, z.MaxTime)
-		}
-		if (zb0001Mask & 0x10) == 0 { // if not omitted
-			// string "bytes"
-			o = append(o, 0xa5, 0x62, 0x79, 0x74, 0x65, 0x73)
-			o = msgp.AppendUint64(o, z.Bytes)
-		}
+	if zb0001Len == 0 {
+		return
+	}
+	// string "count"
+	o = append(o, 0xa5, 0x63, 0x6f, 0x75, 0x6e, 0x74)
+	o = msgp.AppendUint64(o, z.Count)
+	// string "acc_time_ns"
+	o = append(o, 0xab, 0x61, 0x63, 0x63, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x5f, 0x6e, 0x73)
+	o = msgp.AppendUint64(o, z.AccTime)
+	if (zb0001Mask & 0x4) == 0 { // if not omitted
+		// string "min_ns"
+		o = append(o, 0xa6, 0x6d, 0x69, 0x6e, 0x5f, 0x6e, 0x73)
+		o = msgp.AppendUint64(o, z.MinTime)
+	}
+	if (zb0001Mask & 0x8) == 0 { // if not omitted
+		// string "max_ns"
+		o = append(o, 0xa6, 0x6d, 0x61, 0x78, 0x5f, 0x6e, 0x73)
+		o = msgp.AppendUint64(o, z.MaxTime)
+	}
+	if (zb0001Mask & 0x10) == 0 { // if not omitted
+		// string "bytes"
+		o = append(o, 0xa5, 0x62, 0x79, 0x74, 0x65, 0x73)
+		o = msgp.AppendUint64(o, z.Bytes)
 	}
 	return
 }
