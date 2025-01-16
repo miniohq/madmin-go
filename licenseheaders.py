@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 # encoding: utf-8
+#  MinIO Inc [madmin-go]
+#  Copyright (c) 2014-2025 MinIO.
+#  All rights reserved. No warranty, explicit or implicit, provided.
+
 
 """A tool to change or add license headers in all supported files in or below a directory."""
 

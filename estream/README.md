@@ -1,3 +1,8 @@
+<!--
+ MinIO Inc [madmin-go]
+ Copyright (c) 2014-2025 MinIO.
+ All rights reserved. No warranty, explicit or implicit, provided.
+-->
 # Encrypted Stream
 
 This package provides a flexible way to merge multiple streams with controlled encryption.

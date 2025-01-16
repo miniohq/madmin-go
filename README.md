@@ -1,3 +1,8 @@
+<!--
+ MinIO Inc [madmin-go]
+ Copyright (c) 2014-2025 MinIO.
+ All rights reserved. No warranty, explicit or implicit, provided.
+-->
 # Golang Admin Client API Reference [![Slack](https://slack.min.io/slack?type=svg)](https://slack.min.io)
 The MinIO Admin Golang Client SDK provides APIs to manage MinIO services.
 
@@ -574,7 +579,3 @@ __Example__
        log.Fatalf("Failed to perform decryption operation using '%s': %v\n", keyInfo.KeyID, keyInfo.DecryptionErr)
     }
 ```
-
-## License
-All versions of this SDK starting from [v2.0.0](https://github.com/minio/madmin-go/releases/tag/v2.0.0) are distributed under the GNU AGPLv3 license that can be found in the [LICENSE](https://github.com/minio/madmin-go/blob/master/LICENSE) file.
-

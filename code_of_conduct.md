@@ -1,3 +1,8 @@
+<!--
+ MinIO Inc [madmin-go]
+ Copyright (c) 2014-2025 MinIO.
+ All rights reserved. No warranty, explicit or implicit, provided.
+-->
 # Contributor Covenant Code of Conduct
 
 ## Our Pledge

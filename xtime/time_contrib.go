@@ -1,6 +1,8 @@
-// Copyright 2010 The Go Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the go.dev/LICENSE file.
+//
+//  MinIO Inc [madmin-go]
+//  Copyright (c) 2014-2025 MinIO.
+//  All rights reserved. No warranty, explicit or implicit, provided.
+//
 
 package xtime
 
